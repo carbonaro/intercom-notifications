@@ -1,0 +1,25 @@
+{
+  "name": "intercom-notifications",
+  "version": "1.0.0",
+  "description": "Send push notification on specific serial messages sent by Arduino Uno",
+  "main": "app.js",
+  "dependencies": {
+    "firmata": "^2.2.0",
+    "pm2": "^4.2.3",
+    "pushsafer-notifications": "^0.1.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carbonaro/intercom-notifications.git"
+  },
+  "author": "Philippe Breuils <philippe.breuils@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carbonaro/intercom-notifications/issues"
+  },
+  "homepage": "https://github.com/carbonaro/intercom-notifications#readme"
+}
