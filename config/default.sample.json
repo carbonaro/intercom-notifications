@@ -1,0 +1,12 @@
+{
+  "App": {
+    "minIntervalBetweenNotifications": 60000
+  },
+  "PushsaferNotifications": {
+    "privateKey": "<PRIVATE KEY>"
+  },
+  "Serial": {
+    "port": "/dev/ttyACM0",
+    "baudRate": 57600
+  }
+}

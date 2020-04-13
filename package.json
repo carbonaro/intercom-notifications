@@ -4,9 +4,11 @@
   "description": "Send push notification on specific serial messages sent by Arduino Uno",
   "main": "app.js",
   "dependencies": {
-    "firmata": "^2.2.0",
+    "config": "^3.3.1",
+    "pino": "^6.2.0",
     "pm2": "^4.2.3",
-    "pushsafer-notifications": "^0.1.8"
+    "pushsafer-notifications": "^0.1.8",
+    "serialport": "^8.0.7"
   },
   "devDependencies": {},
   "scripts": {
