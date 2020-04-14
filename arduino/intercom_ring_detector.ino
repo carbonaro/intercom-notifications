@@ -1,55 +1,25 @@
-#include <FirmataDefines.h>
-#include <FirmataConstants.h>
-#include <Boards.h>
-#include <Firmata.h>
-#include <FirmataMarshaller.h>
-#include <FirmataParser.h>
-
  /*
  * Detect intercom buzzer by analyzing audio level from electrect microphone
  * 
  */
-const int DEFAULT_SAMPLE_WINDOW = 100; // Sample window width in mS
-const double DEFAULT_MIN_MILLI_VOLTS = 3.0; // Value required to trigger a positive
-const int DEFAULT_NUMBER_OF_HITS = 8; // Requires being above threshold for NUMBER_OF_CONFIRMATIONS times in a row
+const int DEFAULT_SAMPLE_WINDOW = 150; // Sample window width in mS
+const double DEFAULT_MIN_VOLTS = 3.0; // Value required to trigger a positive
+const int DEFAULT_NUMBER_OF_HITS = 6; // Requires being above threshold for NUMBER_OF_CONFIRMATIONS times in a row
 
 unsigned int value;
 unsigned int minNumberOfHits;
 unsigned int n = 0;
 int sampleWindow;
-double minMilliVolts;
-
-void sysexCallback(byte command, byte argc, byte *argv)
-{
-  switch(command) {
-  case 0x01: // Setup detection params
-    if(argc < 3) break;
-    byte sample_window; // value in 10 ms, e.g., 25 => 250 ms
-    byte min_milli_volts; // value x 100, e.g. 32 => 3200 mV
-    byte number_of_hits;
-    sample_window = argv[0];
-    min_milli_volts = argv[1];
-    number_of_hits = argv[2];
-    //
-    sampleWindow = sample_window * 10;
-    minMilliVolts = min_milli_volts * 100;
-    minNumberOfHits = number_of_hits;
-  default:
-    break;
-  }
-  Firmata.sendSysex(command, argc, argv);
-}
+double minVolts;
 
 void setup() 
 {
   // Variable init with defaults
   sampleWindow = DEFAULT_SAMPLE_WINDOW;
-  minMilliVolts = DEFAULT_MIN_MILLI_VOLTS;
+  minVolts = DEFAULT_MIN_VOLTS;
   minNumberOfHits = DEFAULT_NUMBER_OF_HITS;
   //
-  Firmata.setFirmwareVersion(FIRMATA_MAJOR_VERSION, FIRMATA_MINOR_VERSION);
-  Firmata.attach(START_SYSEX, sysexCallback);
-  Firmata.begin(57600);
+  Serial.begin(57600);
 }
 
 void loop() 
@@ -58,12 +28,6 @@ void loop()
  unsigned int peakToPeak = 0;   // peak-to-peak level
  unsigned int signalMax = 0;
  unsigned int signalMin = 655; //1024;
- 
- while (Firmata.available()) {
-   Firmata.processInput();
- }
-
-
  
  // collect data for SAMPLE_WINDOW miliseconds
  while (millis() - start < sampleWindow)
@@ -82,12 +46,14 @@ void loop()
      }
  }
  peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
- double volts = (peakToPeak * 3300) / 655; // 1024;  // convert to volts
- if (volts > minMilliVolts) {
+ double volts = (peakToPeak * 3.3) / 655; // 1024;  // convert to volts
+ if (volts > minVolts) {
   n = n + 1;
   if (n >= minNumberOfHits) {
     n = 0;
-    Firmata.sendString("RINGING");  
+    Serial.println("RINGING");
   }
+ } else {
+  n = 0;
  }
 }

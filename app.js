@@ -44,8 +44,8 @@ port.on('open', () => {
 });
 
 // Parse serial messages
-parser.on('data', data => {
-  logger.debug('got word from arduino:', data);
+parser.on('data', raw => {
+  var data = raw.replace("\r", "");
   if (data == "RINGING") {
     var timeSinceLastRingingMessage = new Date() - latestNotificationAt;
     if (timeSinceLastRingingMessage > config.get("App.minIntervalBetweenNotifications")) {
