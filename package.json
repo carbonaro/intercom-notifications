@@ -10,7 +10,9 @@
     "pushsafer-notifications": "^0.1.8",
     "serialport": "^8.0.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "bl": ">=4.0.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
